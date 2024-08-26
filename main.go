@@ -8,48 +8,41 @@ import (
 )
 
 func main() {
-
-	fileInfo, err := os.Stat("test.txt")
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	oldTime := fileInfo.ModTime()
+	lastModTimes := make(map[string]time.Time)
 
 	for {
-
-		fileInfo, err = os.Stat("test.txt")
-		if err != nil {
-			log.Println(err)
-			return
-		}
-
-		fileState, err := os.ReadFile("test.txt")
-		if err != nil {
-			log.Println(err)
-		}
-
-		newTime := fileInfo.ModTime()
-
-		if newTime.After(oldTime) {
-			fmt.Println("This file has changed")
-			oldTime = newTime
-
-			newFileState, err := os.ReadFile("test.txt")
+		files := allFilesInCurrDir()
+		for _, file := range files {
+			fileInfo, err := os.Stat(file)
 			if err != nil {
-				fmt.Println("bruh this can't even happen")
+				log.Println(err)
+				continue
 			}
 
-			for _, v := range newFileState {
-
-				if fileState[v] != newFileState[v] {
-					fmt.Printf("%v", v)
-				}
-
+			newTime := fileInfo.ModTime()
+			if lastModTime, exists := lastModTimes[file]; !exists || newTime.After(lastModTime) {
+				fmt.Printf("This file has changed: %s\n", file)
+				lastModTimes[file] = newTime
 			}
 		}
-		time.Sleep(200 * time.Millisecond)
 
+		time.Sleep(200 * time.Millisecond)
 	}
 }
+
+func allFilesInCurrDir() []string {
+	filesInDir, err := os.ReadDir("./")
+	if err != nil {
+		panic(err)
+	}
+
+	var filesSlice []string
+
+	for _, entry := range filesInDir {
+		if !entry.IsDir() { // Only consider regular files, not directories.
+			filesSlice = append(filesSlice, entry.Name())
+		}
+	}
+	return filesSlice
+}
+
