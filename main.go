@@ -2,47 +2,43 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
-	"time"
+	"strings"
 )
 
 func main() {
-	lastModTimes := make(map[string]time.Time)
 
 	for {
-		files := allFilesInCurrDir()
-		for _, file := range files {
-			fileInfo, err := os.Stat(file)
+		filez := readFilesInDir()
+		for i := 0; i < len(filez); i++ {
+			currFile, err := os.Stat(filez[i])
+
 			if err != nil {
-				log.Println(err)
-				continue
+				fmt.Println("cannot get file info")
+				return
 			}
+			// we get time of modification for all fies in curr directory
+			fmt.Println(currFile.Name(), currFile.ModTime())
 
-			newTime := fileInfo.ModTime()
-			if lastModTime, exists := lastModTimes[file]; !exists || newTime.After(lastModTime) {
-				fmt.Printf("This file has changed: %s\n", file)
-				lastModTimes[file] = newTime
-			}
 		}
-
-		time.Sleep(200 * time.Millisecond)
 	}
+
 }
 
-func allFilesInCurrDir() []string {
-	filesInDir, err := os.ReadDir("./")
+func readFilesInDir() []string {
+	files, err := os.ReadDir("./")
 	if err != nil {
-		panic(err)
+		panic("cannot read file dir")
 	}
 
-	var filesSlice []string
+	var fileSlice []string
+	for _, v := range files {
 
-	for _, entry := range filesInDir {
-		if !entry.IsDir() { // Only consider regular files, not directories.
-			filesSlice = append(filesSlice, entry.Name())
+		// avoid .git .gitignore etc
+		if strings.HasPrefix(v.Name(), ".") {
+			continue
 		}
+		fileSlice = append(fileSlice, v.Name())
 	}
-	return filesSlice
+	return fileSlice
 }
-
