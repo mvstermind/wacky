@@ -3,6 +3,7 @@ package filedata
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 	"time"
 )
@@ -77,7 +78,7 @@ func getFileStatus(fileNames []string) ([]string, []time.Time) {
 
 }
 
-func Watch() {
+func Watch(command string) {
 
 watcherUpdate:
 	projectFiles := getFilesInProject()
@@ -87,7 +88,8 @@ watcherUpdate:
 	for {
 		fileChanged := fileProjectInfo.checkIfChanged()
 		if fileChanged {
-			fmt.Println("restarting project")
+			cmd := exec.Command(command)
+			cmd.Run()
 			goto watcherUpdate
 		}
 	}
