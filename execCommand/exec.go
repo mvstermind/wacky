@@ -1,6 +1,9 @@
 package execcommand
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func commandToExecute(args []string) (bool, []string) {
 	var command []string
@@ -21,7 +24,6 @@ func Run(arguments []string) string {
 
 	ok, cmd := commandToExecute(arguments)
 	if !ok {
-		fmt.Println("Cannot find argument to execute")
 		return ""
 	}
 
@@ -29,7 +31,7 @@ func Run(arguments []string) string {
 
 		cmdStr += fmt.Sprintf("%v ", cmd[i])
 	}
+	cmdStr = strings.TrimSpace(cmdStr)
 	return cmdStr
 
 }
-
