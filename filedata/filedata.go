@@ -14,31 +14,32 @@ type ProjectFilesInfo struct {
 }
 
 func NewProjectFileInfo(files []string, modTime []time.Time) *ProjectFilesInfo {
-
 	return &ProjectFilesInfo{
 		FileName: files,
 		ModTime:  modTime,
 	}
 }
 
-func (p *ProjectFilesInfo) checkIfChanged() bool {
+func (p *ProjectFilesInfo) CheckIfChanged() bool {
+	projectFiles := GetFilesInProject()
 
-	projectFiles := getFilesInProject()
+	if len(projectFiles) != len(p.FileName) {
+		return true
+	}
 
-	_, newTime := getFileStatus(projectFiles)
+	_, newTime := GetFileStatus(projectFiles)
+
 	for i := 0; i < len(p.FileName); i++ {
-
-		if newTime[i] != p.ModTime[i] {
+		// use equal to compare time.Time accurately
+		if !newTime[i].Equal(p.ModTime[i]) {
 			return true
 		}
-
 	}
 
 	return false
-
 }
 
-func getFilesInProject() []string {
+func GetFilesInProject() []string {
 	files, err := os.ReadDir("./")
 	if err != nil {
 		panic("cannot read file dir")
@@ -46,8 +47,7 @@ func getFilesInProject() []string {
 
 	var fileSlice []string
 	for _, v := range files {
-
-		// skip .git .gitignore etc
+		// skip .git, .gitignore, etc.
 		if v.IsDir() || strings.HasPrefix(v.Name(), ".") {
 			continue
 		}
@@ -56,8 +56,7 @@ func getFilesInProject() []string {
 	return fileSlice
 }
 
-func getFileStatus(fileNames []string) ([]string, []time.Time) {
-
+func GetFileStatus(fileNames []string) ([]string, []time.Time) {
 	var (
 		fName   []string
 		modTime []time.Time
@@ -75,18 +74,16 @@ func getFileStatus(fileNames []string) ([]string, []time.Time) {
 		modTime = append(modTime, currFile.ModTime())
 	}
 	return fName, modTime
-
 }
 
 func Watch(command string) {
-
 watcherUpdate:
-	projectFiles := getFilesInProject()
+	projectFiles := GetFilesInProject()
 
-	fileProjectInfo := NewProjectFileInfo(getFileStatus(projectFiles))
+	fileProjectInfo := NewProjectFileInfo(GetFileStatus(projectFiles))
 
 	for {
-		fileChanged := fileProjectInfo.checkIfChanged()
+		fileChanged := fileProjectInfo.CheckIfChanged()
 		if fileChanged {
 			cmd := exec.Command(command)
 			cmd.Run()
@@ -94,3 +91,4 @@ watcherUpdate:
 		}
 	}
 }
+
