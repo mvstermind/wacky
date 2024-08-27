@@ -85,9 +85,11 @@ watcherUpdate:
 	for {
 		fileChanged := fileProjectInfo.CheckIfChanged()
 		if fileChanged {
+			fmt.Println("change found")
 			cmd := exec.Command(command)
 			cmd.Run()
-			goto watcherUpdate
+			fileChanged = false
 		}
+		goto watcherUpdate
 	}
 }
