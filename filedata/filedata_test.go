@@ -76,11 +76,11 @@ func TestCheckIfChanged(t *testing.T) {
 		file1 := tempDir + "/file1.txt"
 		file2 := tempDir + "/file2.txt"
 
-		now := time.Now()
 		os.WriteFile(file1, []byte("file1 content"), 0644)
 		os.WriteFile(file2, []byte("file2 content"), 0644)
 
-		modTimes := []time.Time{now, now}
+		// Ensure we pass the actual mod times
+		_, modTimes := filedata.GetFileStatus([]string{file1, file2})
 		projectInfo := filedata.NewProjectFileInfo([]string{file1, file2}, modTimes)
 
 		if projectInfo.CheckIfChanged() {

@@ -21,16 +21,13 @@ func NewProjectFileInfo(files []string, modTime []time.Time) *ProjectFilesInfo {
 }
 
 func (p *ProjectFilesInfo) CheckIfChanged() bool {
-	projectFiles := GetFilesInProject()
+	currentFiles, newTime := GetFileStatus(p.FileName)
 
-	if len(projectFiles) != len(p.FileName) {
+	if len(currentFiles) != len(p.FileName) {
 		return true
 	}
 
-	_, newTime := GetFileStatus(projectFiles)
-
 	for i := 0; i < len(p.FileName); i++ {
-		// use equal to compare time.Time accurately
 		if !newTime[i].Equal(p.ModTime[i]) {
 			return true
 		}
@@ -65,7 +62,10 @@ func GetFileStatus(fileNames []string) ([]string, []time.Time) {
 	for i := 0; i < len(fileNames); i++ {
 		currFile, err := os.Stat(fileNames[i])
 
-		if err != nil {
+		if os.IsNotExist(err) {
+			// handle missing file (indicate a change)
+			continue
+		} else if err != nil {
 			fmt.Println("cannot get file info: ", err)
 			return nil, nil
 		}
@@ -91,4 +91,3 @@ watcherUpdate:
 		}
 	}
 }
-
