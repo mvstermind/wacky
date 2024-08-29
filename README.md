@@ -1,6 +1,6 @@
-# **Wacky** ⏰📂 - The Goofy Go File!
+# **Wacky** ⏰📂 - The File Watcher!
 
-Welcome to **Wacky**—the Go-powered, file-watching wizardry that keeps an eye on your project’s files and runs your specified command faster than you can say “spaghetti code”! Whether you're tweaking some code or adding random print statements (don’t lie, we all do it), Wacky Watcher’s got your back. 😎
+Welcome to **Wacky** the Go-powered, file-watching wizardry that keeps an eye on your project’s files and runs your specified command faster than you can say “spaghetti code”! Whether you're tweaking some code or adding random print statements (don’t lie, we all do it), Wacky got your back. 😎
 
 ## **Features** 🎉
 
