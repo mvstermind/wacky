@@ -85,11 +85,30 @@ watcherUpdate:
 	for {
 		fileChanged := fileProjectInfo.CheckIfChanged()
 		if fileChanged {
-			fmt.Println("change found")
-			cmd := exec.Command(command)
+			fmt.Println("FOUND CHANGE")
+			splitCmd, args := splitUserCommand(command)
+
+			cmd := exec.Command(splitCmd, args)
 			cmd.Run()
 			fileChanged = false
 		}
 		goto watcherUpdate
 	}
+}
+
+func splitUserCommand(command string) (string, []string) {
+
+	cmd := stringToSlice(command)
+
+	cmdName := cmd[0]
+
+	cmdArgs := cmd[1:]
+
+	return cmdName, cmdArgs
+
+}
+
+func stringToSlice(str string) []string {
+
+	return strings.Fields(str)
 }
