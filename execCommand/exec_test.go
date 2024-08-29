@@ -3,7 +3,7 @@ package execcommand_test
 import (
 	"testing"
 
-	execcommand "github.com/mvstermind/file-watcher/execCommand"
+	execcommand "github.com/mvstermind/wacky/execCommand"
 )
 
 func TestRun(t *testing.T) {
@@ -102,4 +102,3 @@ func TestRun(t *testing.T) {
 		}
 	})
 }
-

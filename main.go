@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	execCommand "github.com/mvstermind/file-watcher/execCommand"
-	file "github.com/mvstermind/file-watcher/file"
+	execCommand "github.com/mvstermind/wacky/execCommand"
+	file "github.com/mvstermind/wacky/file"
 )
 
 func main() {

@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mvstermind/file-watcher/file"
+	"github.com/mvstermind/wacky/file"
 )
 
 func TestNewProjectFileInfo(t *testing.T) {
