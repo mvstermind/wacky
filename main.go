@@ -5,13 +5,13 @@ import (
 	"os"
 
 	execCommand "github.com/mvstermind/file-watcher/execCommand"
-	"github.com/mvstermind/file-watcher/filedata"
+	file "github.com/mvstermind/file-watcher/file"
 )
 
 func main() {
 
 	cmd := execCommand.Run(os.Args)
 	fmt.Println(cmd)
-	filedata.Watch(cmd)
+	file.Watch(cmd)
 
 }

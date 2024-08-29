@@ -1,6 +1,7 @@
-package filedata
+package file
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
@@ -82,14 +83,24 @@ watcherUpdate:
 
 	fileProjectInfo := NewProjectFileInfo(GetFileStatus(projectFiles))
 
+	var out bytes.Buffer
 	for {
 		fileChanged := fileProjectInfo.CheckIfChanged()
 		if fileChanged {
 			fmt.Println("FOUND CHANGE")
 			splitCmd, args := splitUserCommand(command)
 
-			cmd := exec.Command(splitCmd, args)
-			cmd.Run()
+			cmd := exec.Command(splitCmd, args...)
+			cmd.Dir = "./"
+			cmd.Stdout = &out
+
+			err := cmd.Run()
+
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Println(out.String())
+
 			fileChanged = false
 		}
 		goto watcherUpdate
