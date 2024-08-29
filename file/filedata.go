@@ -3,6 +3,7 @@ package file
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -46,11 +47,16 @@ func GetFilesInProject() []string {
 	var fileSlice []string
 	for _, v := range files {
 		// skip .git, .gitignore, etc.
-		if v.IsDir() || strings.HasPrefix(v.Name(), ".") {
+		if strings.HasPrefix(v.Name(), ".") {
 			continue
+		}
+
+		if v.IsDir() {
+			fileSlice = append(fileSlice, v.Name())
 		}
 		fileSlice = append(fileSlice, v.Name())
 	}
+
 	return fileSlice
 }
 
@@ -87,7 +93,7 @@ watcherUpdate:
 	for {
 		fileChanged := fileProjectInfo.CheckIfChanged()
 		if fileChanged {
-			fmt.Println("FOUND CHANGE")
+			log.Println("FOUND CHANGE")
 			splitCmd, args := splitUserCommand(command)
 
 			cmd := exec.Command(splitCmd, args...)

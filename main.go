@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	execCommand "github.com/mvstermind/file-watcher/execCommand"
@@ -11,7 +10,6 @@ import (
 func main() {
 
 	cmd := execCommand.Run(os.Args)
-	fmt.Println(cmd)
 	file.Watch(cmd)
 
 }
