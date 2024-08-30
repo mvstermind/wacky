@@ -15,12 +15,10 @@ Welcome to **Wacky** the Go-powered, file-watching wizardry that keeps an eye on
 
 ## **Installation** 🚀
 
-Clone this repository and get ready for some serious file-watching action:
+Install this project and get ready for some serious file-watching action:
 
 ```bash
-git clone https://github.com/mvstermind/wacky.git
-cd wacky
-go build -o wacky
+go install github.com/mvstermin/wacky@latest
 ```
 
 ## **Usage** 🛠️
@@ -28,13 +26,13 @@ go build -o wacky
 Fire up Wacky and tell it what to do when it detects a change:
 
 ```bash
-./wacky -e <your-command-here>
+wacky -e <your-command-here>
 ```
 
 For example, if you want to run tests every time you save a file:
 
 ```bash
-./wacky -e go test ./...
+wacky -e go test ./...
 ```
 
 Now, just sit back, relax, and let Wacky do the heavy lifting.
