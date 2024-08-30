@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"reflect"
 	"strings"
 	"time"
 )
@@ -34,8 +35,20 @@ func (p *ProjectFilesInfo) CheckIfChanged() bool {
 			return true
 		}
 	}
+	// if p.CheckFileDeletions() == true {
+	// 	return true
+	// }
 
 	return false
+}
+
+// TODO: make it so it will know if file/dir was deleted/moved etc
+func (p *ProjectFilesInfo) CheckFileDeletions() bool {
+
+	files := p.FileName
+
+	existingFiles := GetFilesInProject()
+	return reflect.DeepEqual(files, existingFiles)
 }
 
 func GetFilesInProject() []string {
